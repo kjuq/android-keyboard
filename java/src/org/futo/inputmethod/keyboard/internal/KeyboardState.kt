@@ -374,6 +374,9 @@ class KeyboardState(private val switchActions: SwitchActions) {
         shiftTime = null
     }
 
+    private fun isWhitespaceOrControl(code: Int): Boolean =
+        Character.isWhitespace(code) || Character.isSpaceChar(code) || Character.isISOControl(code)
+
     fun onPressKey(code: Int, isSinglePointer: Boolean, autoCapsFlags: Int) {
         if (DEBUG_EVENT) {
             Log.d(
@@ -386,7 +389,7 @@ class KeyboardState(private val switchActions: SwitchActions) {
             onCancelShiftTimer()
         }
 
-        if(currentStateHint.unshiftOnPressed && isAlphabet && code > 0 && code != Constants.CODE_SPACE) {
+        if(currentStateHint.unshiftOnPressed && isAlphabet && code > 0 && !isWhitespaceOrControl(code)) {
             setAlphabetLayout(0)
         }
 
@@ -578,7 +581,7 @@ class KeyboardState(private val switchActions: SwitchActions) {
             }
         }
 
-        if (Constants.isLetterCode(code) && !(currentStateHint.unshiftOnPressed && code == Constants.CODE_SPACE)) {
+        if (Constants.isLetterCode(code) && !(currentStateHint.unshiftOnPressed && isWhitespaceOrControl(code))) {
             updateAlphabetShiftState(autoCapsFlags)
         }
     }
