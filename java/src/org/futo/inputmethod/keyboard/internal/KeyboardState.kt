@@ -386,7 +386,7 @@ class KeyboardState(private val switchActions: SwitchActions) {
             onCancelShiftTimer()
         }
 
-        if(currentStateHint.unshiftOnPressed && isAlphabet && code > 0) {
+        if(currentStateHint.unshiftOnPressed && isAlphabet && code > 0 && code != Constants.CODE_SPACE) {
             setAlphabetLayout(0)
         }
 
@@ -578,7 +578,7 @@ class KeyboardState(private val switchActions: SwitchActions) {
             }
         }
 
-        if (Constants.isLetterCode(code)) {
+        if (Constants.isLetterCode(code) && !(currentStateHint.unshiftOnPressed && code == Constants.CODE_SPACE)) {
             updateAlphabetShiftState(autoCapsFlags)
         }
     }
